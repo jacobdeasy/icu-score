@@ -1,25 +1,14 @@
-import argparse
-import numpy
-import numpy as np
-import os
-import pandas as pd
+import argparse, numpy as np, os, pandas as pd
 
 from oasis import *
 from saps2 import *
 
 
-def score_patients(score_name, data, partition, out_dir='scores'):
+def score_patients(score_name, root, partition, out_dir='scores'):
     """Score a directory of patient timeseries."""
-    if score_name not in ['oasis', 'saps2']:
-        raise Exception('ICU score name is not recognized.')
+    score_dict = eval(score_name+'_score')
 
-    if score_name == 'oasis':
-        score_func = oasis_score
-    elif score_name == 'saps2':
-        score_func = saps2_score
-
-    root = os.path.join(data, partition)
-    ts_files = sorted([f for f in os.listdir(root) if f != 'listfile.csv'])
+    ts_files = sorted([f for f in root if f != 'listfile.csv'])
     scores = np.zeros(len(ts_files))
 
     for i, ts_file in enumerate(ts_files):

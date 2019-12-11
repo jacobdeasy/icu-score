@@ -1,8 +1,6 @@
-import argparse
-import pandas as pd
-import sys
+import argparse, os, pandas as pd, sys
 
-from score.score import Score
+from score.abstract_score import score_picker
 
 
 def parse_arguments(args_to_parse):
@@ -12,7 +10,10 @@ def parse_arguments(args_to_parse):
 
 	# General options
 	parser.add_argument('score_name', type=str,
+						choices=['oasis', 'saps2'],
 						help='Name of the scoring system to use.')
+	parser.add_argument('root', type=str,
+						help='Path to root file/directory.')
 	parser.add_argument('-o', '--out-dir', type=str,
 						default='results',
 						help='Directory to store results in.')
@@ -39,17 +40,18 @@ def main(args):
 	"""
 
 	# Initialise score class
-	icu_score = Score(args.score_name)
+	icu_score = score_picker(args.score_name)
 
 	# Treat single files and directories the same
 	if os.path.isdir(args.root):
 		files = os.listdir(args.root)
-	else
+	else:
 		files = [args.root]
 
+	# Predict score
 	if args.predict:
-		# Predict score
 		predictions = []
+
 		for file in files:
 			prediction = icu_score.predict(file)
 			predictions += [prediction]

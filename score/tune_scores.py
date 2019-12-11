@@ -1,7 +1,4 @@
-import argparse
-import numpy as np
-import os
-import pandas as pd
+import argparse, numpy as np, os, pandas as pd
 
 from scipy.optimize import curve_fit
 from sklearn.linear_model import LogisticRegression
